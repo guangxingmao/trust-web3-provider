@@ -222,11 +222,18 @@ class TrustWeb3Provider {
 
   postMessage(handler, id, data) {
     if (this.ready || handler === "requestAccounts") {
-      window.webkit.messageHandlers[handler].postMessage({
+      // android
+      window["ethWeb3"].postMessage(JSON.stringify({
         "name": handler,
-        "object": data,
+        "payload": data,
         "id": id
-      });
+      }));
+      // iOS
+      // window.webkit.messageHandlers["ethWeb3"].postMessage({
+      //   "name": handler,
+      //   "payload": data,
+      //   "id": "" + id
+      // });
     } else {
       // don't forget to verify in the app
       this.sendError(id, new Error("provider is not ready"));
